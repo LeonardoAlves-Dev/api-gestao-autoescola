@@ -3,8 +3,19 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql-autoescola
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: senai  # 👈 Mudamos para "senai" igual ao laboratório!
       MYSQL_DATABASE: autoescolan116
     ports:
       - "3306:3306"
+    volumes:
+      - ./db-data:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-autoescola
+    restart: always
+    ports:
+      - "5672:5672"   # Porta que o Spring Boot usa para enviar as mensagens
+      - "15672:15672" # Interface visual do RabbitMQ que você pode abrir no navegador

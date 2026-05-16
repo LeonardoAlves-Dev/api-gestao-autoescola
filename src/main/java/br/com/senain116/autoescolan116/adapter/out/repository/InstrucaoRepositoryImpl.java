@@ -49,4 +49,16 @@ public class InstrucaoRepositoryImpl implements InstrucaoRepository {
         InstrucaoEntity saved = jpaRepository.save(entity);
         return entityMapper.toDomain(saved);
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return jpaRepository.existsById(id); // Usa o JpaRepository nativo do Spring
+    }
+
+    @Override
+    public java.util.Optional<Instrucao> findById(Long id) {
+        // Busca a entidade do banco e converte para o modelo de domínio usando o mapper do professor
+        return jpaRepository.findById(id)
+                .map(entityMapper::toDomain);
+    }
 }
