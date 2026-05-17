@@ -1,0 +1,8 @@
+# Ignorar os dados do banco de dados (Resolve o erro de permissão)
+db-data/
+
+# Ignorar pastas de compilação locais e da IDE para deixar o build rápido
+target/
+.idea/
+*.iml
+.git/

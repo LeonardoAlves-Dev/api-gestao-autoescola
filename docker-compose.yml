@@ -1,21 +1,74 @@
 version: '3.8'
+
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-autoescola
-    restart: always
+  db:
+    image: mysql:8.0  # Mantido 8.0 para evitar quebras de versão com o seu banco atual
+    container_name: meu-mysql
+    restart: unless-stopped
+    env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: senai  # 👈 Mudamos para "senai" igual ao laboratório!
-      MYSQL_DATABASE: autoescolan116
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
-      - ./db-data:/var/lib/mysql
+      - ./db-data:/var/lib/mysql  # 👈 CRÍTICO: Mantido o SEU caminho para não perder os dados!
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq-autoescola
-    restart: always
+    container_name: meu-rabbit
+    restart: unless-stopped
     ports:
-      - "5672:5672"   # Porta que o Spring Boot usa para enviar as mensagens
-      - "15672:15672" # Interface visual do RabbitMQ que você pode abrir no navegador
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: auto-escola-n116
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod  # Força o uso do application-prod.properties
+      MYSQL_URL: ${MYSQL_URL}       # Variável nova que o prof usa no prod properties
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      JWT_SECRET: ${JWT_SECRET}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      E_MAIL: ${E_MAIL}
+      SENHA_APP: ${SENHA_APP}
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
