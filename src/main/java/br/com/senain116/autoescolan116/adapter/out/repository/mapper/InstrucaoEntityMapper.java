@@ -21,7 +21,9 @@ public class InstrucaoEntityMapper {
                 entity.getId(),
                 alunoEntityMapper.toDomain(entity.getAluno()),
                 instrutorEntityMapper.toDomain(entity.getInstrutor()),
-                entity.getData()
+                entity.getData(),
+                entity.getMotivoCancelamento(),
+                entity.getCancelada()
         );
     }
 
@@ -30,7 +32,9 @@ public class InstrucaoEntityMapper {
                 instrucao.getId(),
                 alunoEntityMapper.toEntity(instrucao.getAluno()),
                 instrutorEntityMapper.toEntity(instrucao.getInstrutor()),
-                instrucao.getData()
+                instrucao.getData(),
+                instrucao.isCancelada(),
+                instrucao.getMotivoCancelamento()
         );
     }
 }

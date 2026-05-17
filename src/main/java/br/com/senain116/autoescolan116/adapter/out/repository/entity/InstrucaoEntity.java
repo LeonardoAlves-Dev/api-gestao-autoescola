@@ -27,4 +27,11 @@ public class InstrucaoEntity {
     @JoinColumn(name = "instrutor_id")
     private InstrutorEntity instrutor;
     private LocalDateTime data;
+
+    @Column(name = "cancelada")
+    private Boolean cancelada = false;
+
+    @Column(name = "motivo_cancelamento")
+    @Enumerated(jakarta.persistence.EnumType.STRING)
+    private br.com.senain116.autoescolan116.application.core.cancelamento.MotivoCancelamento motivoCancelamento;
 }
