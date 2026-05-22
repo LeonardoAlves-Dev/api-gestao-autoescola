@@ -39,8 +39,8 @@ Para clonar e executar este projeto na sua máquina, você precisará do [Git](h
 
 **1. Clone o repositório:**
 ```bash
-git clone [https://github.com/LeonardoAlves-Dev/api-gestao-autoescola.git](https://github.com/LeonardoAlves-Dev/api-gestao-autoescola.git)
-cd NOME-DO-SEU-REPOSITORIO
+git clone https://github.com/LeonardoAlves-Dev/api-gestao-autoescola.git
+cd api-gestao-autoescola
 ```
 **2. Configure as Variáveis de Ambiente:**<br>
 Crie um arquivo ```.env``` na raiz do projeto com as credenciais do banco de dados:
