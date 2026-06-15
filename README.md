@@ -16,7 +16,7 @@ O grande diferencial deste projeto é a implementação rigorosa da **Arquitetur
 ## 🛠️ Stack Tecnológica & Arquitetura
 
 * **Linguagem:** Java 25
-* **Framework:** Spring Boot 3+ (Web, Data JPA, Validation)
+* **Framework:** Spring Boot 4+ (Web, Data JPA, Validation)
 * **Banco de Dados:** MySQL (Rodando em container Docker)
 * **Migrações:** Flyway Migration (Controle de versão do banco de dados)
 * **Mensageria:** RabbitMQ via Docker
